@@ -1,0 +1,1651 @@
+/* =====================================================
+   GLOBAL APP
+===================================================== */
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7ff;
+  color: #263252;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+
+/* =====================================================
+   LOGIN / REGISTER
+===================================================== */
+
+.login-page {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef4ff,
+      #f8f5ff
+    );
+}
+
+.login-box {
+  width: 100%;
+  max-width: 470px;
+
+  padding: 42px;
+
+  background: white;
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 15px 45px
+    rgba(36, 55, 100, 0.12);
+
+  text-align: center;
+}
+
+.login-box h1 {
+  margin: 0 0 8px;
+
+  color: #17245a;
+
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.login-box h2 {
+  margin: 0 0 10px;
+
+  color: #25336d;
+
+  font-size: 25px;
+}
+
+.login-box > p {
+  margin-bottom: 25px;
+
+  color: #68718a;
+
+  line-height: 1.5;
+}
+
+.login-box form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.login-box input,
+.login-box select {
+  width: 100%;
+
+  padding: 14px 16px;
+
+  border:
+    1px solid #d5dbea;
+
+  border-radius: 10px;
+
+  background: #fbfcff;
+
+  color: #263252;
+
+  font-size: 15px;
+
+  outline: none;
+}
+
+.login-box input:focus,
+.login-box select:focus {
+  border-color: #4161ed;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(65, 97, 237, 0.10);
+}
+
+.login-box form button {
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3159ee,
+      #453bdc
+    );
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 18px
+    rgba(49, 89, 238, 0.22);
+}
+
+.login-box form button:hover {
+  transform: translateY(-1px);
+}
+
+.login-message {
+  margin-top: 18px;
+
+  padding: 12px;
+
+  border-radius: 9px;
+
+  background: #fff0f0;
+
+  color: #d13a3a;
+
+  font-weight: 600;
+}
+
+.register-success {
+  margin-top: 18px;
+
+  padding: 12px;
+
+  border-radius: 9px;
+
+  background: #e9f9ef;
+
+  color: #218848;
+
+  font-weight: 600;
+}
+
+.back-button {
+  margin-top: 20px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #3155d8;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.register-login-button {
+  width: 100%;
+
+  margin-top: 15px;
+
+  padding: 13px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #18285d;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.dashboard {
+  min-height: 100vh;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f4f7ff,
+      #ffffff
+    );
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.dashboard-navbar {
+  min-height: 78px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 15px 5%;
+
+  background: white;
+
+  border-bottom:
+    1px solid #e3e8f2;
+
+  box-shadow:
+    0 3px 15px
+    rgba(30, 45, 90, 0.05);
+}
+
+.dashboard-navbar h2 {
+  margin: 0;
+
+  color: #17245a;
+
+  font-size: 23px;
+}
+
+.admin-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+.admin-info span {
+  color: #3d4660;
+
+  font-weight: 600;
+}
+
+.admin-info button {
+  padding: 10px 18px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #243bdb;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.admin-info button:hover {
+  background: #192cae;
+}
+
+
+/* =====================================================
+   DASHBOARD CONTENT
+===================================================== */
+
+.dashboard-content {
+  padding: 50px 5%;
+}
+
+.dashboard-content h1 {
+  margin: 0 0 10px;
+
+  color: #17245a;
+
+  font-size: 42px;
+}
+
+.dashboard-subtitle {
+  margin: 0 0 35px;
+
+  color: #66718b;
+
+  font-size: 17px;
+}
+
+
+/* =====================================================
+   ADMIN / STUDENT WELCOME
+===================================================== */
+
+.admin-welcome,
+.student-welcome {
+  padding: 50px 5%;
+}
+
+.admin-welcome h1,
+.student-welcome h1 {
+  margin-bottom: 10px;
+
+  color: #17245a;
+
+  font-size: 42px;
+}
+
+.admin-welcome > p,
+.student-welcome > p {
+  color: #66718b;
+
+  font-size: 17px;
+
+  margin-bottom: 35px;
+}
+
+
+/* =====================================================
+   DASHBOARD CARDS
+===================================================== */
+
+.dashboard-cards,
+.student-cards {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 22px;
+}
+
+.dashboard-card {
+  padding: 27px 22px;
+
+  background: white;
+
+  border:
+    1px solid #e0e6f2;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 8px 25px
+    rgba(40, 60, 110, 0.08);
+
+  text-align: center;
+
+  transition: 0.25s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 14px 32px
+    rgba(40, 60, 110, 0.13);
+}
+
+.card-icon {
+  width: 68px;
+  height: 68px;
+
+  margin: 0 auto 15px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #edf2ff;
+
+  font-size: 30px;
+}
+
+.dashboard-card h3 {
+  margin-bottom: 10px;
+
+  color: #17245a;
+
+  font-size: 20px;
+}
+
+.dashboard-card p {
+  min-height: 48px;
+
+  margin-bottom: 18px;
+
+  color: #68738c;
+
+  line-height: 1.45;
+}
+
+.dashboard-card button {
+  border: none;
+
+  padding: 11px 20px;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3159ee,
+      #493bdd
+    );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   GENERAL DATA PAGE
+===================================================== */
+
+.data-page {
+  width: 100%;
+
+  max-width: 1250px;
+
+  margin: auto;
+
+  padding: 30px 25px 60px;
+}
+
+.back-dashboard {
+  border: none;
+
+  padding: 11px 20px;
+
+  margin-bottom: 18px;
+
+  border-radius: 8px;
+
+  background: #18285d;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.data-page > h1 {
+  margin-bottom: 25px;
+
+  text-align: center;
+
+  color: #17245a;
+
+  font-size: 48px;
+}
+
+.data-content {
+  width: 100%;
+
+  padding: 25px;
+
+  background: white;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 8px 28px
+    rgba(40, 60, 110, 0.09);
+}
+
+.table-container {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+/* =====================================================
+   GENERAL TABLE
+===================================================== */
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 650px;
+}
+
+th {
+  padding: 15px;
+
+  background: #18285d;
+
+  color: white;
+
+  text-align: left;
+
+  font-size: 15px;
+}
+
+th:first-child {
+  border-radius: 7px 0 0 0;
+}
+
+th:last-child {
+  border-radius: 0 7px 0 0;
+}
+
+td {
+  padding: 14px 15px;
+
+  border-bottom:
+    1px solid #e3e7ef;
+
+  color: #293550;
+
+  font-size: 15px;
+}
+
+tbody tr:hover td {
+  background: #f5f8ff;
+}
+
+
+/* =====================================================
+   PREFERENCES
+===================================================== */
+
+.preference-box {
+  max-width: 700px;
+
+  margin: auto;
+
+  padding: 30px;
+
+  background: #f8faff;
+
+  border:
+    1px solid #dfe5f1;
+
+  border-radius: 17px;
+}
+
+.preference-box h2 {
+  margin-bottom: 10px;
+
+  color: #17245a;
+}
+
+.preference-box p {
+  margin-bottom: 20px;
+
+  color: #68738c;
+
+  line-height: 1.5;
+}
+
+.preference-box select,
+.preference-box input {
+  width: 100%;
+
+  padding: 13px 15px;
+
+  margin-bottom: 15px;
+
+  border:
+    1px solid #cfd7e7;
+
+  border-radius: 9px;
+
+  background: white;
+
+  color: #293550;
+
+  font-size: 15px;
+}
+
+.preference-box select:focus,
+.preference-box input:focus {
+  outline: none;
+
+  border-color: #4161ed;
+}
+
+.preference-box button {
+  padding: 13px 22px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3159e9,
+      #503bd9
+    );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   MATCHING
+===================================================== */
+
+.match-button {
+  padding: 13px 22px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3159e9,
+      #503bd9
+    );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.match-button:hover {
+  transform: translateY(-1px);
+}
+
+.match-result {
+  margin-top: 18px;
+
+  padding: 17px;
+
+  border-radius: 10px;
+
+  background: #eaf0ff;
+
+  color: #1e3e9d;
+
+  font-weight: 700;
+
+  line-height: 1.5;
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+.student-profile {
+  max-width: 700px;
+
+  margin: auto;
+
+  padding: 30px;
+
+  background: #f8faff;
+
+  border:
+    1px solid #dfe5f1;
+
+  border-radius: 17px;
+}
+
+.student-profile h2 {
+  margin-bottom: 20px;
+
+  color: #17245a;
+}
+
+.student-profile p {
+  padding: 13px 0;
+
+  border-bottom:
+    1px solid #e1e6f0;
+
+  color: #3f4a64;
+}
+
+.student-profile strong {
+  color: #17245a;
+}
+
+
+/* =====================================================
+   ROOM
+===================================================== */
+
+.room-card {
+  max-width: 750px;
+
+  margin: auto;
+
+  padding: 30px;
+
+  background: white;
+
+  border:
+    1px solid #dfe5f1;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 8px 25px
+    rgba(40,60,110,0.07);
+}
+
+.room-card h2 {
+  color: #17245a;
+
+  margin-bottom: 20px;
+}
+
+.room-card p {
+  padding: 12px 0;
+
+  border-bottom:
+    1px solid #e3e7ef;
+
+  color: #44506a;
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+.payment-amount {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 18px;
+
+  margin: 20px 0;
+
+  background: white;
+
+  border-radius: 12px;
+
+  border:
+    1px solid #e0e6f1;
+}
+
+.payment-amount span {
+  color: #58637b;
+
+  font-weight: 600;
+}
+
+.payment-amount strong {
+  color: #17245a;
+
+  font-size: 24px;
+}
+
+.payment-history {
+  margin-top: 30px;
+}
+
+.payment-history h2 {
+  margin-bottom: 18px;
+
+  color: #17245a;
+}
+
+.payment-history table {
+  min-width: 750px;
+}
+
+
+/* =====================================================
+   ALLOCATION
+===================================================== */
+
+.allocation-box {
+  max-width: 700px;
+
+  margin: auto;
+
+  padding: 30px;
+
+  background: #f8faff;
+
+  border-radius: 17px;
+
+  border:
+    1px solid #dfe5f1;
+}
+
+.allocation-box select {
+  width: 100%;
+
+  padding: 13px;
+
+  margin-bottom: 15px;
+
+  border:
+    1px solid #cfd7e7;
+
+  border-radius: 9px;
+
+  background: white;
+}
+
+.allocation-box button {
+  padding: 13px 22px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #3159e9;
+
+  color: white;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-group {
+  margin-bottom: 17px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #293550;
+
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   CLEAN STUDENT MANAGEMENT PAGE
+===================================================== */
+
+.clean-data-page {
+  width: 100%;
+
+  max-width: 1350px;
+
+  margin: 0 auto;
+
+  padding: 35px 40px 60px;
+}
+
+
+/* =====================================================
+   STUDENT PAGE HEADER
+===================================================== */
+
+.clean-page-header {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 28px;
+}
+
+.clean-page-header h1 {
+  margin: 12px 0 6px;
+
+  color: #17245a;
+
+  font-size: 36px;
+
+  font-weight: 800;
+}
+
+.clean-page-header p {
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 15px;
+}
+
+.clean-back-button {
+  border: none;
+
+  background: transparent;
+
+  color: #4055b8;
+
+  padding: 0;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.clean-back-button:hover {
+  color: #25389c;
+}
+
+.student-header-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+.student-count {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  background: white;
+
+  border:
+    1px solid #e2e7f0;
+
+  border-radius: 10px;
+}
+
+.student-count strong {
+  color: #273c9f;
+
+  font-size: 20px;
+}
+
+.student-count span {
+  color: #667085;
+
+  font-size: 14px;
+}
+
+.clean-add-button {
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #3159ee;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.clean-add-button:hover {
+  background: #2648d1;
+}
+
+
+/* =====================================================
+   STUDENT TABLE CARD
+===================================================== */
+
+.student-table-card {
+  background: white;
+
+  border:
+    1px solid #e1e6ef;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 7px 25px
+    rgba(30, 45, 90, 0.07);
+
+  overflow: hidden;
+}
+
+.student-table-header {
+  padding: 23px 25px;
+
+  border-bottom:
+    1px solid #e7ebf2;
+}
+
+.student-table-header h2 {
+  margin: 0 0 5px;
+
+  color: #17245a;
+
+  font-size: 20px;
+}
+
+.student-table-header p {
+  margin: 0;
+
+  color: #7a8499;
+
+  font-size: 14px;
+}
+
+.student-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.clean-student-table {
+  width: 100%;
+
+  min-width: 950px;
+
+  border-collapse: collapse;
+}
+
+.clean-student-table th {
+  padding: 15px 18px;
+
+  background: #f7f9fc;
+
+  color: #59657a;
+
+  border-bottom:
+    1px solid #e2e7ef;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.clean-student-table td {
+  padding: 16px 18px;
+
+  color: #344054;
+
+  border-bottom:
+    1px solid #edf0f4;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+.clean-student-table tbody tr:hover {
+  background: #f9fbff;
+}
+
+.clean-student-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =====================================================
+   STUDENT NAME
+===================================================== */
+
+.student-id {
+  color: #667085;
+
+  font-weight: 700;
+}
+
+.student-name-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.student-avatar {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e9efff;
+
+  color: #3159ee;
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+.student-name-cell strong {
+  color: #17245a;
+}
+
+
+/* =====================================================
+   STUDENT BADGES
+===================================================== */
+
+.branch-badge,
+.gender-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.branch-badge {
+  background: #eef2ff;
+
+  color: #4055b8;
+}
+
+.gender-badge.female {
+  background: #fceef7;
+
+  color: #b33d78;
+}
+
+.gender-badge.male {
+  background: #eaf2ff;
+
+  color: #3159a8;
+}
+
+
+/* =====================================================
+   STUDENT ACTIONS
+===================================================== */
+
+.student-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.edit-student-button,
+.delete-student-button {
+  padding: 7px 12px;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.edit-student-button {
+  border:
+    1px solid #cdd7f7;
+
+  background: #f3f6ff;
+
+  color: #3159ee;
+}
+
+.edit-student-button:hover {
+  background: #e8edff;
+}
+
+.delete-student-button {
+  border:
+    1px solid #f1caca;
+
+  background: #fff5f5;
+
+  color: #d04444;
+}
+
+.delete-student-button:hover {
+  background: #ffe9e9;
+}
+
+.empty-students {
+  padding: 50px !important;
+
+  text-align: center;
+
+  color: #7a8499 !important;
+}
+
+
+/* =====================================================
+   ADD / EDIT STUDENT MODAL
+===================================================== */
+
+.student-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 25px;
+
+  background:
+    rgba(17, 25, 45, 0.45);
+
+  backdrop-filter: blur(3px);
+}
+
+.student-modal {
+  width: 100%;
+
+  max-width: 680px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: white;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 25px 70px
+    rgba(15, 25, 55, 0.22);
+}
+
+
+/* =====================================================
+   MODAL HEADER
+===================================================== */
+
+.student-modal-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  padding: 24px 28px;
+
+  border-bottom:
+    1px solid #e7ebf2;
+}
+
+.student-modal-header h2 {
+  margin: 0 0 5px;
+
+  color: #17245a;
+
+  font-size: 22px;
+}
+
+.student-modal-header p {
+  margin: 0;
+
+  color: #7a8499;
+
+  font-size: 13px;
+}
+
+.modal-close-button {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #f3f5f8;
+
+  color: #667085;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  background: #e9edf3;
+
+  color: #263247;
+}
+
+
+/* =====================================================
+   STUDENT FORM
+===================================================== */
+
+.student-clean-form {
+  padding: 28px;
+}
+
+.clean-form-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+}
+
+.clean-form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.clean-form-group label {
+  color: #344054;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.clean-form-group input,
+.clean-form-group select {
+  width: 100%;
+
+  height: 44px;
+
+  padding: 0 13px;
+
+  border:
+    1px solid #d5dbe7;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #344054;
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+.clean-form-group input::placeholder {
+  color: #a0a8b8;
+}
+
+.clean-form-group input:focus,
+.clean-form-group select:focus {
+  border-color: #4161ed;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(65, 97, 237, 0.09);
+}
+
+.student-form-message {
+  margin-top: 20px;
+
+  padding: 11px 13px;
+
+  border-radius: 8px;
+
+  background: #edf4ff;
+
+  color: #3159a8;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.student-form-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 28px;
+
+  padding-top: 20px;
+
+  border-top:
+    1px solid #edf0f4;
+}
+
+.clean-cancel-button {
+  padding: 11px 20px;
+
+  border:
+    1px solid #d5dbe7;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #59657a;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.clean-cancel-button:hover {
+  background: #f7f8fa;
+}
+
+.clean-save-button {
+  padding: 11px 22px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #3159ee;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.clean-save-button:hover {
+  background: #2648d1;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .dashboard-cards,
+  .student-cards {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+}
+
+@media (max-width: 850px) {
+
+  .dashboard-cards,
+  .student-cards {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .dashboard-navbar {
+    padding: 15px 25px;
+  }
+
+  .admin-welcome,
+  .student-welcome {
+    padding: 35px 25px;
+  }
+
+  .clean-data-page {
+    padding: 30px 25px 50px;
+  }
+
+}
+
+@media (max-width: 750px) {
+
+  .clean-page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .student-header-right {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .clean-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .student-modal {
+    max-height: 95vh;
+  }
+
+  .student-clean-form {
+    padding: 20px;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .dashboard-cards,
+  .student-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-navbar {
+    flex-direction: column;
+
+    gap: 12px;
+
+    text-align: center;
+  }
+
+  .admin-info {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .data-page {
+    padding: 20px 15px 40px;
+  }
+
+  .data-page > h1 {
+    font-size: 36px;
+  }
+
+  .data-content {
+    padding: 15px;
+  }
+
+  .login-page {
+    padding: 15px;
+  }
+
+  .login-box {
+    padding: 30px 20px;
+  }
+
+  .student-profile,
+  .preference-box,
+  .allocation-box {
+    padding: 20px;
+  }
+
+  .clean-data-page {
+    padding: 25px 15px 45px;
+  }
+
+  .clean-page-header h1 {
+    font-size: 30px;
+  }
+
+  .student-header-right {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .student-count {
+    justify-content: center;
+  }
+
+  .clean-add-button {
+    width: 100%;
+  }
+
+  .student-modal-overlay {
+    padding: 12px;
+  }
+
+  .student-modal-header {
+    padding: 20px;
+  }
+
+}
