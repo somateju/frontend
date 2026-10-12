@@ -1,536 +1,433 @@
-import { useEffect, useState } from "react";
 
-import StudentPreferences from "../components/StudentPreferences";
-import MyRoom from "../components/MyRoom";
+import { useEffect, useState } from "react";
+import DashboardCard from "../components/DashboardCard";
+import DataPage from "../components/DataPage";
 import RoommateMatching from "../components/RoommateMatching";
-import MyPayments from "../components/MyPayments";
+import PaymentManagement from "../components/PaymentManagement";
+
+const API = "http://localhost:8080/api";
 
 function StudentDashboard({ user, onLogout }) {
-
-  const [activePage, setActivePage] =
-    useState("dashboard");
-
-  const [students, setStudents] =
-    useState([]);
-
-  const [currentStudent, setCurrentStudent] =
-    useState(null);
+  const [activePage, setActivePage] = useState("dashboard");
+  const [currentStudent, setCurrentStudent] = useState(null);
+  const [hostels, setHostels] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [allocations, setAllocations] = useState([]);
+  const [preferences, setPreferences] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    loadStudentData();
+  }, [user?.email]);
 
-    const loadStudents = async () => {
+  async function loadStudentData() {
+    setLoading(true);
+    setErrorMessage("");
 
-      try {
+    try {
+      const responses = await Promise.all([
+        fetch(`${API}/students`),
+        fetch(`${API}/hostels`),
+        fetch(`${API}/rooms`),
+        fetch(`${API}/allocations`),
+        fetch(`${API}/preferences`)
+      ]);
 
-        const response =
-          await fetch(
-            "http://localhost:8080/api/students"
-          );
+      const failedResponse = responses.find(
+        response => !response.ok
+      );
 
-        const data =
-          await response.json();
-
-        setStudents(data);
-
-        const student =
-          data.find(
-            (item) =>
-              item.email === user?.email
-          );
-
-        if (student) {
-          setCurrentStudent(student);
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Error loading students:",
-          error
+      if (failedResponse) {
+        throw new Error(
+          `Unable to load dashboard data (HTTP ${failedResponse.status}).`
         );
-
       }
-    };
 
-    loadStudents();
+      const [
+        studentsData,
+        hostelsData,
+        roomsData,
+        allocationsData,
+        preferencesData
+      ] = await Promise.all(
+        responses.map(response => response.json())
+      );
 
-  }, [user]);
+      const students = Array.isArray(studentsData)
+        ? studentsData
+        : [];
 
+      const email = user?.email?.trim().toLowerCase();
 
-  // =========================
-  // STUDENT DASHBOARD
-  // =========================
+      const matchedStudent = students.find(
+        student =>
+          student.email?.trim().toLowerCase() === email
+      );
+
+      if (!matchedStudent) {
+        setCurrentStudent(null);
+        setErrorMessage(
+          "Your student account could not be found. Please log out and log in again using your registered student email."
+        );
+        return;
+      }
+
+      setCurrentStudent(matchedStudent);
+      setHostels(Array.isArray(hostelsData) ? hostelsData : []);
+      setRooms(Array.isArray(roomsData) ? roomsData : []);
+      setAllocations(
+        Array.isArray(allocationsData) ? allocationsData : []
+      );
+      setPreferences(
+        Array.isArray(preferencesData) ? preferencesData : []
+      );
+    } catch (error) {
+      console.error("Student dashboard error:", error);
+      setErrorMessage(
+        error.message ||
+          "Unable to connect to the backend. Make sure the Spring Boot server is running."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const studentAllocations = allocations.filter(
+    allocation =>
+      String(allocation.student?.id) ===
+      String(currentStudent?.id)
+  );
+
+  const myPreference = preferences.find(
+    preference =>
+      String(preference.student?.id) ===
+      String(currentStudent?.id)
+  );
+
+  const availableRooms = rooms.filter(
+    room => Number(room.occupied) < Number(room.capacity)
+  );
+
+  function StudentNavbar() {
+    return (
+      <nav className="dashboard-navbar">
+        <h2>Smart Hostel - Student</h2>
+        <div className="admin-info">
+          <span>
+            Welcome, {currentStudent?.name || user?.name}
+          </span>
+          <button onClick={onLogout}>Logout</button>
+        </div>
+      </nav>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="dashboard">
+        <StudentNavbar />
+        <div className="dashboard-content">
+          <h2>Loading your dashboard...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentStudent) {
+    return (
+      <div className="dashboard">
+        <StudentNavbar />
+        <div className="dashboard-content">
+          <h1>Student Dashboard</h1>
+          <div className="match-result">
+            {errorMessage || "Student account not found."}
+          </div>
+          <button
+            className="match-button"
+            onClick={loadStudentData}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (activePage === "dashboard") {
-
     return (
       <div className="dashboard">
+        <StudentNavbar />
 
-        <nav className="dashboard-navbar">
+        <div className="dashboard-content">
+          <h1>Student Dashboard</h1>
 
-          <h2>
-            Smart Hostel - Student
-          </h2>
-
-          <div className="admin-info">
-
-            <span>
-              Welcome, {user?.name}
-            </span>
-
-            <button onClick={onLogout}>
-              Logout
-            </button>
-
-          </div>
-
-        </nav>
-
-
-        <div className="student-welcome">
-
-          <h1>
-            Student Dashboard
-          </h1>
-
-          <p>
-            Manage your profile, preferences,
-            roommate matching, room details
-            and hostel payments.
+          <p className="dashboard-subtitle">
+            Welcome, {currentStudent.name}. Find a compatible
+            roommate and view your hostel information.
           </p>
 
+          {errorMessage && (
+            <div className="match-result">{errorMessage}</div>
+          )}
 
-          <div className="student-cards">
+          <div className="dashboard-cards">
+            <DashboardCard
+              icon="🤝"
+              title="Find Roommate"
+              description="Automatically find your best roommate"
+              onClick={() => setActivePage("matching")}
+            />
 
+            <DashboardCard
+              icon="❤️"
+              title="My Preferences"
+              description={
+                myPreference
+                  ? "View your saved roommate preferences"
+                  : "No preferences submitted yet"
+              }
+              onClick={() => setActivePage("preferences")}
+            />
 
-            {/* =====================
-                MY PROFILE
-            ====================== */}
+            <DashboardCard
+              icon="🏠"
+              title="Hostels"
+              description={`${hostels.length} hostels available`}
+              onClick={() => setActivePage("hostels")}
+            />
 
-            <div className="dashboard-card">
+            <DashboardCard
+              icon="🚪"
+              title="Available Rooms"
+              description={`${availableRooms.length} rooms have space`}
+              onClick={() => setActivePage("rooms")}
+            />
 
-              <div className="card-icon">
-                👤
-              </div>
+            <DashboardCard
+              icon="📋"
+              title="My Room Allocation"
+              description={`${studentAllocations.length} room allocations`}
+              onClick={() => setActivePage("allocations")}
+            />
 
-              <h3>
-                My Profile
-              </h3>
-
-              <p>
-                View your complete student
-                profile information.
-              </p>
-
-              <button
-                onClick={() =>
-                  setActivePage("profile")
-                }
-              >
-                View Profile
-              </button>
-
-            </div>
-
-
-            {/* =====================
-                MY PREFERENCES
-            ====================== */}
-
-            <div className="dashboard-card">
-
-              <div className="card-icon">
-                ❤️
-              </div>
-
-              <h3>
-                My Preferences
-              </h3>
-
-              <p>
-                Submit your lifestyle and
-                roommate preferences.
-              </p>
-
-              <button
-                onClick={() =>
-                  setActivePage("preferences")
-                }
-              >
-                Manage Preferences
-              </button>
-
-            </div>
-
-
-            {/* =====================
-                FIND ROOMMATE
-            ====================== */}
-
-            <div className="dashboard-card">
-
-              <div className="card-icon">
-                🤝
-              </div>
-
-              <h3>
-                Find Roommate
-              </h3>
-
-              <p>
-                Find your most compatible
-                roommate automatically.
-              </p>
-
-              <button
-                onClick={() =>
-                  setActivePage("matching")
-                }
-              >
-                Find Roommate
-              </button>
-
-            </div>
-
-
-            {/* =====================
-                MY ROOM
-            ====================== */}
-
-            <div className="dashboard-card">
-
-              <div className="card-icon">
-                🏠
-              </div>
-
-              <h3>
-                My Room
-              </h3>
-
-              <p>
-                View your allocated hostel
-                room details.
-              </p>
-
-              <button
-                onClick={() =>
-                  setActivePage("room")
-                }
-              >
-                View My Room
-              </button>
-
-            </div>
-
-
-            {/* =====================
-                MY PAYMENTS
-            ====================== */}
-
-            <div className="dashboard-card">
-
-              <div className="card-icon">
-                💳
-              </div>
-
-              <h3>
-                My Payments
-              </h3>
-
-              <p>
-                Pay your hostel fee and
-                view payment history.
-              </p>
-
-              <button
-                onClick={() =>
-                  setActivePage("payments")
-                }
-              >
-                View Payments
-              </button>
-
-            </div>
-
-
+            <DashboardCard
+              icon="💳"
+              title="My Payments"
+              description="View payment history and record demo payments"
+              onClick={() => setActivePage("payments")}
+            />
           </div>
-
-        </div>
-
-      </div>
-    );
-  }
-
-
-  // =========================
-  // MY PROFILE
-  // =========================
-
-  if (activePage === "profile") {
-
-    return (
-      <div className="dashboard">
-
-        <StudentNavbar
-          user={user}
-          onLogout={onLogout}
-        />
-
-
-        <div className="data-page">
-
-          <button
-            className="back-dashboard"
-            onClick={() =>
-              setActivePage("dashboard")
-            }
-          >
-            ← Back to Dashboard
-          </button>
-
-
-          <h1>
-            My Profile
-          </h1>
-
 
           <div className="data-content">
-
-            <div className="student-profile">
-
-              <h2>
-                Student Information
-              </h2>
-
-
-              {currentStudent ? (
-
-                <>
-
-                  <p>
-                    <strong>
-                      Student ID:
-                    </strong>{" "}
-                    {currentStudent.id}
-                  </p>
-
-
-                  <p>
-                    <strong>
-                      Name:
-                    </strong>{" "}
-                    {currentStudent.name}
-                  </p>
-
-
-                  <p>
-                    <strong>
-                      Email:
-                    </strong>{" "}
-                    {currentStudent.email}
-                  </p>
-
-
-                  <p>
-                    <strong>
-                      Branch:
-                    </strong>{" "}
-                    {currentStudent.branch}
-                  </p>
-
-
-                  <p>
-                    <strong>
-                      Year:
-                    </strong>{" "}
-                    {currentStudent.year}
-                  </p>
-
-
-                  <p>
-                    <strong>
-                      Gender:
-                    </strong>{" "}
-                    {currentStudent.gender}
-                  </p>
-
-
-                  <p>
-                    <strong>
-                      Role:
-                    </strong>{" "}
-                    Student
-                  </p>
-
-                </>
-
-              ) : (
-
-                <p>
-                  Loading student information...
-                </p>
-
-              )}
-
-            </div>
-
+            <h2>My Student Details</h2>
+            <p><strong>Name:</strong> {currentStudent.name}</p>
+            <p><strong>Email:</strong> {currentStudent.email}</p>
+            <p><strong>Student ID:</strong> {currentStudent.id}</p>
+            <p><strong>Branch:</strong> {currentStudent.branch || "—"}</p>
+            <p><strong>Year:</strong> {currentStudent.year || "—"}</p>
+            <p><strong>Gender:</strong> {currentStudent.gender || "—"}</p>
           </div>
-
         </div>
-
       </div>
     );
   }
-
-
-  // =========================
-  // MY PREFERENCES
-  // =========================
-
-  if (activePage === "preferences") {
-
-    return (
-      <div className="dashboard">
-
-        <StudentNavbar
-          user={user}
-          onLogout={onLogout}
-        />
-
-
-        <StudentPreferences
-          user={user}
-          onBack={() =>
-            setActivePage("dashboard")
-          }
-        />
-
-      </div>
-    );
-  }
-
-
-  // =========================
-  // ROOMMATE MATCHING
-  // =========================
 
   if (activePage === "matching") {
-
     return (
       <div className="dashboard">
-
-        <StudentNavbar
-          user={user}
-          onLogout={onLogout}
-        />
-
-
+        <StudentNavbar />
         <RoommateMatching
-          students={students}
-          currentStudentId={
-            currentStudent?.id
-          }
-          onBack={() =>
-            setActivePage("dashboard")
-          }
+          students={[]}
+          currentStudentId={currentStudent.id}
+          onBack={() => setActivePage("dashboard")}
         />
-
       </div>
     );
   }
-
-
-  // =========================
-  // MY ROOM
-  // =========================
-
-  if (activePage === "room") {
-
-    return (
-      <div className="dashboard">
-
-        <StudentNavbar
-          user={user}
-          onLogout={onLogout}
-        />
-
-
-        <MyRoom
-          user={user}
-          onBack={() =>
-            setActivePage("dashboard")
-          }
-        />
-
-      </div>
-    );
-  }
-
-
-  // =========================
-  // MY PAYMENTS
-  // =========================
 
   if (activePage === "payments") {
-
     return (
       <div className="dashboard">
-
-        <StudentNavbar
-          user={user}
-          onLogout={onLogout}
+        <StudentNavbar />
+        <PaymentManagement
+          isAdmin={false}
+          studentId={currentStudent.id}
+          onBack={() => setActivePage("dashboard")}
         />
-
-
-        <MyPayments
-          user={user}
-          onBack={() =>
-            setActivePage("dashboard")
-          }
-        />
-
       </div>
     );
   }
 
+  if (activePage === "hostels") {
+    return (
+      <div className="dashboard">
+        <StudentNavbar />
+        <DataPage
+          title="Available Hostels"
+          onBack={() => setActivePage("dashboard")}
+        >
+          {hostels.length === 0 ? (
+            <p>No hostels are available right now.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Hostel Name</th>
+                  <th>Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                {hostels.map(hostel => (
+                  <tr key={hostel.id}>
+                    <td>{hostel.id}</td>
+                    <td>{hostel.name}</td>
+                    <td>{hostel.location}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </DataPage>
+      </div>
+    );
+  }
+
+  if (activePage === "rooms") {
+    return (
+      <div className="dashboard">
+        <StudentNavbar />
+        <DataPage
+          title="Available Rooms"
+          onBack={() => setActivePage("dashboard")}
+        >
+          {availableRooms.length === 0 ? (
+            <p>No rooms with available capacity were found.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Room Number</th>
+                  <th>Room Type</th>
+                  <th>Capacity</th>
+                  <th>Occupied</th>
+                  <th>Hostel</th>
+                </tr>
+              </thead>
+              <tbody>
+                {availableRooms.map(room => (
+                  <tr key={room.id}>
+                    <td>{room.roomNumber}</td>
+                    <td>{room.roomType}</td>
+                    <td>{room.capacity}</td>
+                    <td>{room.occupied}</td>
+                    <td>{room.hostel?.name || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </DataPage>
+      </div>
+    );
+  }
+
+  if (activePage === "allocations") {
+    return (
+      <div className="dashboard">
+        <StudentNavbar />
+        <DataPage
+          title="My Room Allocation"
+          onBack={() => setActivePage("dashboard")}
+        >
+          {studentAllocations.length === 0 ? (
+            <p>You do not have a room allocation yet.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Room Number</th>
+                  <th>Room Type</th>
+                  <th>Hostel</th>
+                  <th>Location</th>
+                  <th>Allocation Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {studentAllocations.map(allocation => (
+                  <tr key={allocation.id}>
+                    <td>{allocation.room?.roomNumber || "—"}</td>
+                    <td>{allocation.room?.roomType || "—"}</td>
+                    <td>{allocation.room?.hostel?.name || "—"}</td>
+                    <td>{allocation.room?.hostel?.location || "—"}</td>
+                    <td>{allocation.allocationDate || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </DataPage>
+      </div>
+    );
+  }
+
+  if (activePage === "preferences") {
+    return (
+      <div className="dashboard">
+        <StudentNavbar />
+        <DataPage
+          title="My Roommate Preferences"
+          onBack={() => setActivePage("dashboard")}
+        >
+          {!myPreference ? (
+            <div className="match-result">
+              No saved preferences were found for your account.
+              Submit your preferences using the preference form
+              already provided in your project.
+            </div>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Preference</th>
+                  <th>Saved Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sleep Schedule</td>
+                  <td>{myPreference.sleepSchedule || "—"}</td>
+                </tr>
+                <tr>
+                  <td>Study Habit</td>
+                  <td>{myPreference.studyHabit || "—"}</td>
+                </tr>
+                <tr>
+                  <td>Cleanliness</td>
+                  <td>{myPreference.cleanliness || "—"}</td>
+                </tr>
+                <tr>
+                  <td>Food Preference</td>
+                  <td>{myPreference.foodPreference || "—"}</td>
+                </tr>
+                <tr>
+                  <td>Smoking Preference</td>
+                  <td>{myPreference.smokingPreference || "—"}</td>
+                </tr>
+                <tr>
+                  <td>Room Type</td>
+                  <td>{myPreference.roomType || "—"}</td>
+                </tr>
+              </tbody>
+            </table>
+          )}
+        </DataPage>
+      </div>
+    );
+  }
 
   return null;
 }
-
-
-// =================================
-// STUDENT NAVBAR
-// =================================
-
-function StudentNavbar({
-  user,
-  onLogout
-}) {
-
-  return (
-    <nav className="dashboard-navbar">
-
-      <h2>
-        Smart Hostel - Student
-      </h2>
-
-
-      <div className="admin-info">
-
-        <span>
-          Welcome, {user?.name}
-        </span>
-
-
-        <button onClick={onLogout}>
-          Logout
-        </button>
-
-      </div>
-
-    </nav>
-  );
-}
-
 
 export default StudentDashboard;
